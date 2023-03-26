@@ -9,29 +9,32 @@
           <country-flag :country="countryCode" />
         </span>
       </td>
-      
+      <td>
+       <edit-modal :car="car"></edit-modal>
+       <delete-modal :carId="car.id"></delete-modal>
+      </td>    
     </tr>
   </template>
   
   <script lang="ts">
   import { Component, Prop, Vue } from 'vue-property-decorator';
   import { Car } from '@/dtos/Car';
+  import EditModal from '@/components/EditModal.vue';
+  import DeleteModal from '@/components/DeleteModal.vue';
   import CountryFlag from 'vue-country-flag';
   import * as iso from 'iso-3166-1';
   
   @Component({
     components: {
-      CountryFlag
+      CountryFlag,
+      EditModal,
+      DeleteModal
     }
   })
   export default class CarLine extends Vue {
     @Prop({ required: true }) car!: Car;
   
     countryCode = '';
-    showPopup = false;
-    editedCar: Car = { ...this.car }; // Create a copy of the car object to edit
-  
-   
     
     mounted() {
       const country = iso.whereCountry(this.car.country);

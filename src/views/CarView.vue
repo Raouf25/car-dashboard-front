@@ -24,6 +24,7 @@
             <th>Constructeur</th>
             <th>Date de création</th>
             <th>Pays</th>
+            <th>Actions</th> 
           </tr>
         </thead>
         <tbody>
