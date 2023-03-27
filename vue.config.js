@@ -8,5 +8,8 @@ module.exports = defineConfig({
         changeOrigin: true
       },
     }
-  }
+  },
+  publicPath: process.env.NODE_ENV === 'production'
+    ? '/car-dashboard-front/'
+    : '/'
 })
