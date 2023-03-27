@@ -1,6 +1,8 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
-
-const BASE_URL = 'http://localhost:8080/'
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios' 
+// grace au riverse proxi de vue.config.js
+//const BASE_URL = 'http://localhost:8080/'  //=> http://localhost:8080/cars?sort=createDate
+//const BASE_URL = 'https://spring-boot-efficient-search-api.fly.dev/api'  // => https://spring-boot-efficient-search-api.fly.dev/api/cars?sort=createDate
+const BASE_URL = process.env.VUE_APP_PROXY
 
 class AxiosService {
   private instance: AxiosInstance;
