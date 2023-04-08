@@ -4,7 +4,7 @@
       <div class="controls">
         <div class="pagesize">
           <label for="pagesize">Taille de page:</label>
-          <select v-model="limit" @change="pageSizeChanged">
+          <select v-model="pageSizetmp" @change="pageSizeChanged">
             <option value="10">10</option>
             <option value="20">20</option>
             <option value="50">50</option>
@@ -36,57 +36,53 @@
   
   <script lang="ts">
   import { Component, Vue } from "vue-property-decorator";
-  import axiosService from '@/services/Api'
   import { Car } from "@/dtos/Car";
   import CarLine from "@/components/CarLine.vue";
+import { Getter, Mutation, Action } from "vuex-class";
   
   @Component({
       components: {
           CarLine
       }
   })
-  export default class CarView extends Vue {
-      cars: Car[] = [];
-      displayedCars: Car[] = [];
-      currentPage = 0;
-      limit = 10;
-      pageCount = 0;
-  
-      async created() {
-          await this.fetchCars();
-      }
-  
-      async fetchCars() {
-          const carResponse = await axiosService.get<Car[]>("/cars",{
-              params: {
-                  sort: 'createDate'                
-              },
-              headers: {
-                  'Page-Number': this.currentPage,
-                  'Page-Size': this.limit
-              }
-          });
-  
-          this.cars = carResponse.data;
-          this.pageCount = carResponse.headers['page-total'];
-          this.displayedCars = this.cars;
-      }
-  
-      async nextPage() {
-          this.currentPage++;
-          await this.fetchCars();
+  export default class CarView extends Vue { 
+    pageSizetmp = 0;
+
+    // Utiliser le décorateur @Getter pour accéder aux getters du store
+    @Getter currentPage!: number;
+    @Getter pageSize!: number;
+    @Getter pageCount!: number;
+    @Getter displayedCars!: Car[];
+
+    // Utiliser le décorateur @Mutation pour appeler les mutations du store
+    @Mutation setDisplayedCars!: (displayedCars: Car[]) => void;
+    @Mutation setCurrentPage!: (currentPage: number) => void;
+    @Mutation setPageSize!: (pageSize: number) => void;
+    @Mutation setPageCount!: (pageCount: number) => void;
+
+    // Utiliser le décorateur @Action pour appeler les actions du store
+    @Action fetchCars!: () => Promise<void>;
+
+      created() {
+        this.pageSizetmp = this.pageSize
+        this.fetchCars(); // Appel de l'action fetchCars du store Vuex pour récupérer la liste de voitures au démarrage du composant en utilisant les valeurs du store pour currentPageNumber et pageSize
+     }
+
+     async nextPage() {
+        this.setCurrentPage(this.currentPage+1);
+          this.fetchCars();
       }
   
       async prevPage() {
-          this.currentPage--;
-          await this.fetchCars();
+          this.setCurrentPage(this.currentPage-1);
+          this.fetchCars();
       }
-  
-      async pageSizeChanged() {
-      this.currentPage = 0;
-      await this.fetchCars();
+
+     async pageSizeChanged() {
+      this.setPageSize(this.pageSizetmp);
+      this.fetchCars();
     }
-  }
+}
   </script>
   
   <style>
