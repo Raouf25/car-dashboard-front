@@ -1,23 +1,14 @@
-const globalValues = {
-    state: {
-      isLoading: false
-    },
-    getters: {
-      isLoadingValue(state: any): boolean {
-        return state.isLoading;
-      }
-    },
-    mutations: {
-      updateLoading(state: any, newVal: boolean): void {
-        state.isLoading = newVal;
-      }
-    },
-    actions: {
-      setLoading({ commit }: any, newVal: boolean): void {
-        commit('updateLoading', newVal);
-      }
-    }
+import { VuexModule, Module, Mutation, Action } from 'vuex-module-decorators'
+@Module({ namespaced: true })
+class globalValues extends VuexModule {
+  public isLoading?: boolean = false
+  @Mutation
+  public updateLoading(newVal: boolean): void {
+    this.isLoading = newVal
   }
-
-  export default globalValues
-  
+  @Action
+  public setLoading(newVal: boolean): void {
+    this.context.commit('updateLoading', newVal)
+  }
+}
+export default globalValues

@@ -1,54 +1,20 @@
-<!-- <template>
-  <div id="app">
-    <nav>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/cars">Cars</router-link> |
-      <router-link to="/about">About</router-link>
-    </nav>
-    <router-view/>
-  </div>
-</template>
-
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
-}
-</style>
- -->
- <template>
-	<div class="app">
+<template>
+	<div class="app"  
+	v-loading="isLoading"
+	element-loading-text="Loading ..." 
+    element-loading-background="rgba(0, 0, 0, 0.8)">
 		<!-- Sidebar -->
 		<side-bar />
-
 		<!-- Content -->
-    <div><router-view /></div>
-		
+		<div><router-view /></div>
 	</div>
 </template>
 
-<!-- <script>
-import SideBar from './components/SideBar.vue'
-</script> -->
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import SideBar from "@/components/SideBar.vue";
+import { namespace } from 'vuex-class'
+const globalValues = namespace('globalValues')
 
 @Component({
     components: {
@@ -56,6 +22,8 @@ import SideBar from "@/components/SideBar.vue";
     }
 })
 export default class CarNewPage extends Vue {
+	@globalValues.State
+	public isLoading!: boolean
 }
 </script> 
 

@@ -1,3 +1,4 @@
+import store from '@/store'
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios' 
 // grace au riverse proxi de vue.config.js
 //const BASE_URL = 'http://localhost:8080/'  //=> http://localhost:8080/cars?sort=createDate
@@ -16,26 +17,23 @@ class AxiosService {
         'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json'
       }
+    }) 
+    this.instance.interceptors.request.use((request) => {
+      store.dispatch('globalValues/setLoading', true)
+      return request
     })
-
-    this.instance.interceptors.request.use(
-      (config) => {
-        config.url = config.url?.split('|').join('%7C')
-        return config
-      },
-      (error) => {
-        return Promise.reject(error)
-      }
-    )
-
+  
     this.instance.interceptors.response.use(
-      (response: AxiosResponse) => {
+      (response) => {
+        store.dispatch('globalValues/setLoading', false)
         return response
       },
       (error) => {
-        return Promise.reject(error)
+        store.dispatch('globalValues/setLoading', false)
+        return error
       }
     )
+
   }
 
   get<T> (url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
