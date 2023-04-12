@@ -20,6 +20,10 @@
 				<span class="material-icons">directions_car</span>
 				<span class="text">Cars</span>
 			</router-link>
+			<router-link to="/image" class="button">
+				<span class="material-icons">photo_library</span>
+				<span class="text">Images</span>
+			</router-link>
 			<router-link to="/about" class="button">
 				<span class="material-icons">description</span>
 				<span class="text">About</span>
