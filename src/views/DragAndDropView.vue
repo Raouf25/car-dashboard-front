@@ -1,0 +1,153 @@
+<template>
+  <div>
+    <h1>Uploader des images</h1>
+    <div class="drop-zone-container">
+      <div class="drop-zone-divider"></div>
+      <div class="drop-zone" @dragover.prevent @drop="handleDrop">
+        <p v-if="isZone1Visible">Zone de dépôt 1</p>
+        <img v-else :src="uploadedImage1.url" :alt="uploadedImage1.name" class="uploaded-image"/>
+      </div>
+
+      <div class="drop-zone-divider"></div>
+      <div class="drop-zone-divider"></div>
+
+      <div class="drop-zone" @dragover.prevent @drop="handleDrop2">
+        <p v-if="isZone2Visible">Zone de dépôt 2</p>
+        <img v-else :src="uploadedImage2.url" :alt="uploadedImage2.name" class="uploaded-image"/>
+      </div>
+ 
+
+    </div>
+
+    <button @click="startAlgorithm" :disabled="!isButtonActive" class="start-button">Start Analyse</button>
+  </div>
+</template>
+
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator';
+
+interface UploadedImage {
+  name: string;
+  url: string;
+}
+
+@Component
+export default class UploadImagesComponent extends Vue {
+  
+  public uploadedImage1: UploadedImage | null = null;
+  private uploadedImage2: UploadedImage | null = null;
+
+  private isButtonActive = false;
+
+  public isZone1Visible = true;
+  public isZone2Visible = true; // Ajouter cette variable pour gérer la visibilité du texte dans la zone "Zone de dépôt 2"
+
+  private handleDrop(event: DragEvent): void {
+    event.preventDefault();
+    const files = event.dataTransfer?.files;
+    if (files) {
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const reader = new FileReader();
+        reader.onload = (e) => {
+         const uploadedImage: UploadedImage =({ name: file.name, url: e.target?.result as string })
+         this.uploadedImage1 =  uploadedImage
+          this.checkButtonActivation();
+          if (i === 0) {
+            this.isZone1Visible = false;
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+  }
+
+  private handleDrop2(event: DragEvent): void {
+    event.preventDefault();
+    const files = event.dataTransfer?.files;
+    if (files) {
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const reader = new FileReader();
+        reader.onload = (e) => {
+         const uploadedImage: UploadedImage =({ name: file.name, url: e.target?.result as string })
+         this.uploadedImage2 =  uploadedImage
+          this.checkButtonActivation();
+          if (i === 0) {
+            this.isZone2Visible = false; // Masquer le texte dans la zone "Zone de dépôt 2" après le premier fichier déposé
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+  }
+
+  private checkButtonActivation(): void {
+
+    if (this.uploadedImage1 !== null && this.uploadedImage2 !== null) {
+      this.isButtonActive = true;
+    } else {
+      this.isButtonActive = false;
+    }
+  }
+
+  private startAlgorithm(): void {
+    if (this.isButtonActive) {
+      console.log('Start Algo');
+    }
+  }
+}
+</script>
+
+<style scoped>
+.drop-zone-container {
+  display: flex;
+}
+
+.drop-zone {
+  flex: 1;
+  width: 240px;
+  height: 240px;
+  border: 4px dashed #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 10px; /* Ajout de la propriété border-radius avec une valeur de 10px pour les angles arrondis */
+}
+
+.uploaded-image {
+  width : 100vw;
+height : 100vh;
+max-width : 240px;
+max-height : 150px;
+}
+
+
+.drop-zone-divider {
+  width: 2px; /* Largeur de la colonne */
+  background-color: #000; /* Couleur de fond de la colonne */
+  margin: 0 10px; /* Marge autour de la colonne */
+  height: 100%; /* Hauteur de la colonne */
+}
+
+.image-container {
+  margin-top: 20px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.start-button {
+  margin-top: 20px;
+  display: block;
+  margin: 20px auto;
+}
+</style>
