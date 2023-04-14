@@ -1,25 +1,22 @@
 <template>
-    <div>
-      <h1>Uploader des images</h1>
-      <div class="drop-zone-container">
-        <div class="drop-zone" @dragover.prevent @drop="handleDrop">
-          <p>Zone de dépôt 1</p>
-        </div>
-        <div class="drop-zone-divider"></div> <!-- Colonnes ajoutée -->
-        <div class="drop-zone" @dragover.prevent @drop="handleDrop">
-          <p>Zone de dépôt 2</p>
-        </div>
+  <div>
+    <h1>Uploader des images</h1>
+    <div class="drop-zone-container">
+      <div class="drop-zone" @dragover.prevent @drop="handleDrop">
+        <p v-if="isZone1Visible">Zone de dépôt 1</p>
+        <img v-else :src="uploadedImages[0].url" :alt="uploadedImages[0].name" class="uploaded-image"/>
       </div>
-      <div class="image-container">
-        <h2>Images téléchargées :</h2>
-        <ul>
-          <li v-for="(image, index) in uploadedImages" :key="index">
-            <img :src="image.url" :alt="image.name" />
-          </li>
-        </ul>
+
+      <div class="drop-zone-divider"></div>
+
+      <div class="drop-zone" @dragover.prevent @drop="handleDrop2">
+        <p v-if="isZone2Visible">Zone de dépôt 2</p>
+        <img v-else :src="uploadedImages[1].url" :alt="uploadedImages[1].name" class="uploaded-image"/>
       </div>
-      <button @click="startAlgorithm" :disabled="!isButtonActive" class="start-button">Start Analyse</button>
     </div>
+
+    <button @click="startAlgorithm" :disabled="!isButtonActive" class="start-button">Start Analyse</button>
+  </div>
 </template>
 
 <script lang="ts">
@@ -33,19 +30,43 @@ interface UploadedImage {
 @Component
 export default class UploadImagesComponent extends Vue {
   private uploadedImages: UploadedImage[] = [];
-  private isButtonActive = false; // Nouvelle variable pour gérer l'état du bouton
+  private isButtonActive = false;
+
+  public isZone1Visible = true;
+  public isZone2Visible = true; // Ajouter cette variable pour gérer la visibilité du texte dans la zone "Zone de dépôt 2"
 
   private handleDrop(event: DragEvent): void {
     event.preventDefault();
     const files = event.dataTransfer?.files;
     if (files) {
-      // Parcourir les fichiers pour les lire en tant que Blob et les afficher
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
         const reader = new FileReader();
         reader.onload = (e) => {
           this.uploadedImages.push({ name: file.name, url: e.target?.result as string });
-          this.checkButtonActivation(); // Appeler la fonction pour vérifier si le bouton doit être activé
+          this.checkButtonActivation();
+          if (i === 0) {
+            this.isZone1Visible = false;
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+  }
+
+  private handleDrop2(event: DragEvent): void {
+    event.preventDefault();
+    const files = event.dataTransfer?.files;
+    if (files) {
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.uploadedImages.push({ name: file.name, url: e.target?.result as string });
+          this.checkButtonActivation();
+          if (i === 0) {
+            this.isZone2Visible = false; // Masquer le texte dans la zone "Zone de dépôt 2" après le premier fichier déposé
+          }
         };
         reader.readAsDataURL(file);
       }
@@ -75,14 +96,21 @@ export default class UploadImagesComponent extends Vue {
 
 .drop-zone {
   flex: 1;
-  width: 200px;
-  height: 200px;
+  width: 220px;
+  height: 220px;
   border: 4px dashed #ccc;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   border-radius: 10px; /* Ajout de la propriété border-radius avec une valeur de 10px pour les angles arrondis */
+}
+
+.uploaded-image {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 10px;
 }
 
 .drop-zone-divider {
