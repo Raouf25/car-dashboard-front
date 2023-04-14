@@ -4,14 +4,14 @@
     <div class="drop-zone-container">
       <div class="drop-zone" @dragover.prevent @drop="handleDrop">
         <p v-if="isZone1Visible">Zone de dépôt 1</p>
-        <img v-else :src="uploadedImages[0].url" :alt="uploadedImages[0].name" class="uploaded-image"/>
+        <img v-else :src="uploadedImage1.url" :alt="uploadedImage1.name" class="uploaded-image"/>
       </div>
 
       <div class="drop-zone-divider"></div>
 
       <div class="drop-zone" @dragover.prevent @drop="handleDrop2">
         <p v-if="isZone2Visible">Zone de dépôt 2</p>
-        <img v-else :src="uploadedImages[1].url" :alt="uploadedImages[1].name" class="uploaded-image"/>
+        <img v-else :src="uploadedImage2.url" :alt="uploadedImage2.name" class="uploaded-image"/>
       </div>
     </div>
 
@@ -29,7 +29,10 @@ interface UploadedImage {
 
 @Component
 export default class UploadImagesComponent extends Vue {
-  private uploadedImages: UploadedImage[] = [];
+  
+  public uploadedImage1: UploadedImage | null = null;
+  private uploadedImage2: UploadedImage | null = null;
+
   private isButtonActive = false;
 
   public isZone1Visible = true;
@@ -43,7 +46,8 @@ export default class UploadImagesComponent extends Vue {
         const file = files[i];
         const reader = new FileReader();
         reader.onload = (e) => {
-          this.uploadedImages.push({ name: file.name, url: e.target?.result as string });
+         const uploadedImage: UploadedImage =({ name: file.name, url: e.target?.result as string })
+         this.uploadedImage1 =  uploadedImage
           this.checkButtonActivation();
           if (i === 0) {
             this.isZone1Visible = false;
@@ -62,7 +66,8 @@ export default class UploadImagesComponent extends Vue {
         const file = files[i];
         const reader = new FileReader();
         reader.onload = (e) => {
-          this.uploadedImages.push({ name: file.name, url: e.target?.result as string });
+         const uploadedImage: UploadedImage =({ name: file.name, url: e.target?.result as string })
+         this.uploadedImage2 =  uploadedImage
           this.checkButtonActivation();
           if (i === 0) {
             this.isZone2Visible = false; // Masquer le texte dans la zone "Zone de dépôt 2" après le premier fichier déposé
@@ -74,7 +79,8 @@ export default class UploadImagesComponent extends Vue {
   }
 
   private checkButtonActivation(): void {
-    if (this.uploadedImages.length === 2) {
+
+    if (this.uploadedImage1 !== null && this.uploadedImage2 !== null) {
       this.isButtonActive = true;
     } else {
       this.isButtonActive = false;
