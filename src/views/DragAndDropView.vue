@@ -2,17 +2,21 @@
   <div>
     <h1>Uploader des images</h1>
     <div class="drop-zone-container">
+      <div class="drop-zone-divider"></div>
       <div class="drop-zone" @dragover.prevent @drop="handleDrop">
         <p v-if="isZone1Visible">Zone de dépôt 1</p>
         <img v-else :src="uploadedImage1.url" :alt="uploadedImage1.name" class="uploaded-image"/>
       </div>
 
       <div class="drop-zone-divider"></div>
+      <div class="drop-zone-divider"></div>
 
       <div class="drop-zone" @dragover.prevent @drop="handleDrop2">
         <p v-if="isZone2Visible">Zone de dépôt 2</p>
         <img v-else :src="uploadedImage2.url" :alt="uploadedImage2.name" class="uploaded-image"/>
       </div>
+ 
+
     </div>
 
     <button @click="startAlgorithm" :disabled="!isButtonActive" class="start-button">Start Analyse</button>
@@ -102,8 +106,8 @@ export default class UploadImagesComponent extends Vue {
 
 .drop-zone {
   flex: 1;
-  width: 220px;
-  height: 220px;
+  width: 240px;
+  height: 240px;
   border: 4px dashed #ccc;
   display: flex;
   align-items: center;
@@ -113,11 +117,12 @@ export default class UploadImagesComponent extends Vue {
 }
 
 .uploaded-image {
-  width: 200px;
-  height: 200px;
-  object-fit: cover;
-  border-radius: 10px;
+  width : 100vw;
+height : 100vh;
+max-width : 240px;
+max-height : 150px;
 }
+
 
 .drop-zone-divider {
   width: 2px; /* Largeur de la colonne */
