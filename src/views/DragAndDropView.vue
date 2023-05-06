@@ -170,8 +170,11 @@ export default class UploadImagesComponent extends Vue {
       console.log("Start Algo");
       this.fetchPoints();
       this.coloredPoints = this.generatedColoredPoints(this.displayedPoints);
-      this.drawDotsOnImage(this.uploadedImage1, this.coloredPoints);
-      this.drawDotsOnImage2(this.uploadedImage2, this.coloredPoints);
+    //  this  .coloredPoints  .forEach(element => {  console.log(element.x1,element.y1,element.x2,element.y2,element.color) });
+      const cinqPremiersElements =  this.coloredPoints.slice(0, 5);
+      cinqPremiersElements.forEach(element => {  console.log(element.x1,element.y1,element.x2,element.y2,element.color) });
+      this.drawDotsOnImage(this.uploadedImage1, cinqPremiersElements);
+      this.drawDotsOnImage2(this.uploadedImage2, cinqPremiersElements);
     }
   }
 
@@ -189,7 +192,7 @@ export default class UploadImagesComponent extends Vue {
         for (const point of points) {
           ctx.fillStyle = point.color;
           ctx.beginPath();
-          ctx.arc(point.y1, point.x1, 4, 0, 2 * Math.PI);
+          ctx.arc(point.x1, point.y1, 4, 0, 2 * Math.PI);
           ctx.fill();
         }
 
@@ -215,7 +218,7 @@ export default class UploadImagesComponent extends Vue {
         for (const point of points) {
           ctx.fillStyle = point.color;
           ctx.beginPath();
-          ctx.arc(point.y2, point.x2, 4, 0, 2 * Math.PI);
+          ctx.arc(point.x2, point.y2, 4, 0, 2 * Math.PI);
           ctx.fill();
         }
 
