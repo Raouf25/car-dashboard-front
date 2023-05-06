@@ -30,33 +30,24 @@
       Start Analyse
     </button>
 
-    <h1>2. Result :</h1>
-<div style="display: flex;">
-  <div style="flex: 1;">
-    <p>Image 1</p>
-    <img
-      :src="processedImage1"
-      :alt="'Processed ' + uploadedImage1?.name"
-    />
-  </div>
-  <div class="drop-zone-divider"></div>
-  <div style="flex: 1;">
-    <p>Image 2</p>
-    <img
-      :src="processedImage2"
-      :alt="'Processed ' + uploadedImage2?.name"
-    />
-  </div>
-</div>
-
-
-    <button
-      @click="edittAlgorithm"
-      :disabled="!isButtonActive"
-      class="start-button"
-    >
-      Edit Result
-    </button>
+    <h1 v-if="showResultSection">2. Result :</h1>
+    <div v-if="showResultSection" style="display: flex">
+      <div style="flex: 1">
+        <p>Image 1</p>
+        <img
+          :src="processedImage1"
+          :alt="'Processed ' + uploadedImage1?.name"
+        />
+      </div>
+      <div class="drop-zone-divider"></div>
+      <div style="flex: 1">
+        <p>Image 2</p>
+        <img
+          :src="processedImage2"
+          :alt="'Processed ' + uploadedImage2?.name"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -82,6 +73,7 @@ export default class UploadImagesComponent extends Vue {
 
   public isZone1Visible = true;
   public isZone2Visible = true; // Ajouter cette variable pour gérer la visibilité du texte dans la zone "Zone de dépôt 2"
+  public showResultSection = false;
 
   public coloredPoints: Point[] = [];
 
@@ -129,19 +121,10 @@ export default class UploadImagesComponent extends Vue {
   }
 
   private checkButtonActivation(): void {
-    if (this.uploadedImage1 !== null && this.uploadedImage2 !== null) {
-      this.isButtonActive = true;
-    } else {
-      this.isButtonActive = false;
-    }
-  }
+  this.isButtonActive = this.uploadedImage1 !== null && this.uploadedImage2 !== null;
+}
 
-  private edittAlgorithm(): void {
-    if (this.isButtonActive) {
-      console.log("edittAlgorithm");
-    }
-  }
-
+//------------  Ce Code à déplacer au backend 
   // Fonction utilitaire pour générer une couleur aléatoire
   private randomColor(): string {
     const r = Math.floor(Math.random() * 256);
@@ -160,54 +143,32 @@ export default class UploadImagesComponent extends Vue {
     }
     return points;
   }
+//--------------
+
 
   private startAlgorithm(): void {
-    if (
-      this.isButtonActive &&
-      this.uploadedImage1 !== null &&
-      this.uploadedImage2 !== null
-    ) {
-      console.log("Start Algo");
-      this.fetchPoints();
-      this.coloredPoints = this.generatedColoredPoints(this.displayedPoints);
-    //  this  .coloredPoints  .forEach(element => {  console.log(element.x1,element.y1,element.x2,element.y2,element.color) });
-      const cinqPremiersElements =  this.coloredPoints.slice(0, 5);
-      cinqPremiersElements.forEach(element => {  console.log(element.x1,element.y1,element.x2,element.y2,element.color) });
-      this.drawDotsOnImage(this.uploadedImage1, cinqPremiersElements);
-      this.drawDotsOnImage2(this.uploadedImage2, cinqPremiersElements);
+    if (this.isButtonActive) {
+      this.showResultSection = true;
+      this.fetchPoints()
+        .then(( ) => {
+          this.coloredPoints = this.generatedColoredPoints( this.displayedPoints );
+          const cinqPremiersElements = this.coloredPoints.slice(0, 5);
+          this.drawDotsOnImage( "uploadedImage1",  "processedImage1", cinqPremiersElements);
+          this.drawDotsOnImage( "uploadedImage2",  "processedImage2", cinqPremiersElements);
+        })
+        .catch((error) => { console.error("Une erreur s'est produite lors de la récupération des points :", error); });
     }
   }
 
-  private drawDotsOnImage(uploadedImage: UploadedImage, points: Point[]): void {
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
-    if (ctx) {
-      const img = new Image();
-      img.src = uploadedImage.url;
-      img.onload = () => {
-        canvas.width = img.width;
-        canvas.height = img.height;
-        ctx.drawImage(img, 0, 0);
-
-        for (const point of points) {
-          ctx.fillStyle = point.color;
-          ctx.beginPath();
-          ctx.arc(point.x1, point.y1, 4, 0, 2 * Math.PI);
-          ctx.fill();
-        }
-
-        this.processedImage1 = canvas.toDataURL();
-      };
-    }
-  }
-
-  private drawDotsOnImage2(
-    uploadedImage: UploadedImage,
+  private drawDotsOnImage(
+    imageProperty: "uploadedImage1" | "uploadedImage2",
+    processedImageProperty: "processedImage1" | "processedImage2",
     points: Point[]
   ): void {
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
-    if (ctx) {
+    const uploadedImage = this[imageProperty];
+    if (ctx && uploadedImage) {
       const img = new Image();
       img.src = uploadedImage.url;
       img.onload = () => {
@@ -218,11 +179,12 @@ export default class UploadImagesComponent extends Vue {
         for (const point of points) {
           ctx.fillStyle = point.color;
           ctx.beginPath();
-          ctx.arc(point.x2, point.y2, 4, 0, 2 * Math.PI);
+          const x = imageProperty === "uploadedImage1" ? point.x1 : point.x2;
+          const y = imageProperty === "uploadedImage1" ? point.y1 : point.y2;
+          ctx.arc(x, y, 4, 0, 2 * Math.PI);
           ctx.fill();
         }
-
-        this.processedImage2 = canvas.toDataURL();
+        this[processedImageProperty] = canvas.toDataURL();
       };
     }
   }
