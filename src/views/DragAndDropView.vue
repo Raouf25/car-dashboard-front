@@ -48,11 +48,26 @@
         />
       </div>
     </div>
+
+    <div v-if="showResultSection" style="display: flex">
+      <div style="flex: 1">
+        <Cropper
+          v-if="showResultSection"
+          :alt="processedImage1"
+          :src="processedImage1"
+          @result="onResult"
+        />
+      </div>
+      <div style="flex: 1">
+        <img :src="resultImage" />
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import Cropper from "@/components/Cropper.vue";
 import { Point } from "@/dtos/Point";
 import { Getter, Mutation, Action } from "vuex-class";
 
@@ -61,7 +76,11 @@ interface UploadedImage {
   url: string;
 }
 
-@Component
+@Component({
+  components: {
+    Cropper,
+  },
+})
 export default class UploadImagesComponent extends Vue {
   public uploadedImage1: UploadedImage | null = null;
   private uploadedImage2: UploadedImage | null = null;
@@ -121,42 +140,33 @@ export default class UploadImagesComponent extends Vue {
   }
 
   private checkButtonActivation(): void {
-  this.isButtonActive = this.uploadedImage1 !== null && this.uploadedImage2 !== null;
-}
-
-//------------  Ce Code à déplacer au backend 
-  // Fonction utilitaire pour générer une couleur aléatoire
-  private randomColor(): string {
-    const r = Math.floor(Math.random() * 256);
-    const g = Math.floor(Math.random() * 256);
-    const b = Math.floor(Math.random() * 256);
-    return `rgb(${r}, ${g}, ${b})`;
+    this.isButtonActive =
+      this.uploadedImage1 !== null && this.uploadedImage2 !== null;
   }
-
-  private generatedColoredPoints(points: Point[]): Point[] {
-    // Générer une couleur aléatoire en utilisant la fonction `randomColor`
-    const color = this.randomColor();
-    for (const point of points) {
-      // Générer une couleur aléatoire en utilisant la fonction `randomColor`
-      const color = this.randomColor();
-      point.color = color;
-    }
-    return points;
-  }
-//--------------
-
 
   private startAlgorithm(): void {
     if (this.isButtonActive) {
       this.showResultSection = true;
       this.fetchPoints()
-        .then(( ) => {
-          this.coloredPoints = this.generatedColoredPoints( this.displayedPoints );
-          const cinqPremiersElements = this.coloredPoints.slice(0, 5);
-          this.drawDotsOnImage( "uploadedImage1",  "processedImage1", cinqPremiersElements);
-          this.drawDotsOnImage( "uploadedImage2",  "processedImage2", cinqPremiersElements);
+        .then(() => {
+          const cinqPremiersElements = this.displayedPoints.slice(0, 5);
+          this.drawDotsOnImage(
+            "uploadedImage1",
+            "processedImage1",
+            cinqPremiersElements
+          );
+          this.drawDotsOnImage(
+            "uploadedImage2",
+            "processedImage2",
+            cinqPremiersElements
+          );
         })
-        .catch((error) => { console.error("Une erreur s'est produite lors de la récupération des points :", error); });
+        .catch((error) => {
+          console.error(
+            "Une erreur s'est produite lors de la récupération des points :",
+            error
+          );
+        });
     }
   }
 
@@ -187,6 +197,13 @@ export default class UploadImagesComponent extends Vue {
         this[processedImageProperty] = canvas.toDataURL();
       };
     }
+  }
+
+  public resultImage: string | undefined = "";
+  // public selectedImage = 'https://images.pexels.com/photos/67636/rose-blue-flower-rose-blooms-67636.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500';
+
+  onResult(result: string) {
+    this.resultImage = result;
   }
 }
 </script>
