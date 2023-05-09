@@ -2,25 +2,17 @@
   <div class="container">
     <h1>1. Uploader des images</h1>
     <div class="drop-zone-container">
-      <div class="drop-zone" @dragover.prevent @drop="handleDrop1">
-        <p v-if="isZone1Visible">Zone de dépôt 1</p>
-        <img
-          v-else
-          :src="uploadedImage1.url"
-          :alt="uploadedImage1.name"
-          class="uploaded-image"
-        />
-      </div>
+      <drop-zone
+        label="Zone de dépôt 1"
+        :uploaded-image="uploadedImage1"
+        @imageDropped="handleImageDropped(1, $event)"
+      ></drop-zone>
       <div class="drop-zone-divider"></div>
-      <div class="drop-zone" @dragover.prevent @drop="handleDrop2">
-        <p v-if="isZone2Visible">Zone de dépôt 2</p>
-        <img
-          v-else
-          :src="uploadedImage2.url"
-          :alt="uploadedImage2.name"
-          class="uploaded-image"
-        />
-      </div>
+      <drop-zone
+        label="Zone de dépôt 2"
+        :uploaded-image="uploadedImage2"
+        @imageDropped="handleImageDropped(2, $event)"
+      ></drop-zone>
     </div>
     <button
       @click="startAlgorithm"
@@ -53,16 +45,18 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator"; 
+import { Component, Vue } from "vue-property-decorator";  
+import DropZone from "@/components/DropZone.vue";
 import { Point } from "@/dtos/Point";
+import { UploadedImage } from "@/dtos/UploadedImage";
 import { Getter, Mutation, Action } from "vuex-class";
 
-interface UploadedImage {
-  name: string;
-  url: string;
-}
 
-@Component
+@Component({
+      components: {
+        DropZone
+      }
+  })
 export default class UploadImagesComponent extends Vue {
   public uploadedImage1: UploadedImage | null = null;
   private uploadedImage2: UploadedImage | null = null;
@@ -71,9 +65,6 @@ export default class UploadImagesComponent extends Vue {
   private processedImage2: string | null = null;
 
   private isButtonActive = false;
-
-  public isZone1Visible = true;
-  public isZone2Visible = true; // Ajouter cette variable pour gérer la visibilité du texte dans la zone "Zone de dépôt 2"
   public showResultSection = false;
 
   public coloredPoints: Point[] = [];
@@ -87,38 +78,13 @@ export default class UploadImagesComponent extends Vue {
   // Utiliser le décorateur @Action pour appeler les actions du store
   @Action fetchPoints!: () => Promise<void>;
 
-  private handleDrop1(event: DragEvent): void {
-    this.handleDrop(event, 1);
-  }
-
-  private handleDrop2(event: DragEvent): void {
-    this.handleDrop(event, 2);
-  }
-
-  private handleDrop(event: DragEvent, dropZone: number): void {
-    event.preventDefault();
-    const files = event.dataTransfer?.files;
-    if (files) {
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const uploadedImage: UploadedImage = {
-            name: file.name,
-            url: e.target?.result as string,
-          };
-          if (dropZone === 1) {
-            this.uploadedImage1 = uploadedImage;
-            this.isZone1Visible = false;
-          } else if (dropZone === 2) {
-            this.uploadedImage2 = uploadedImage;
-            this.isZone2Visible = false;
-          }
-          this.checkButtonActivation();
-        };
-        reader.readAsDataURL(file);
-      }
+  private handleImageDropped(dropZone: number, uploadedImage: UploadedImage): void {
+    if (dropZone === 1) {
+      this.uploadedImage1 = uploadedImage;
+    } else if (dropZone === 2) {
+      this.uploadedImage2 = uploadedImage;
     }
+    this.checkButtonActivation();
   }
 
   private checkButtonActivation(): void {
@@ -180,43 +146,13 @@ export default class UploadImagesComponent extends Vue {
       };
     }
   }
-
-  public resultImage: string | undefined = "";
-  // public selectedImage = 'https://images.pexels.com/photos/67636/rose-blue-flower-rose-blooms-67636.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500';
-
-  onResult(result: string) {
-    this.resultImage = result;
-  }
 }
 </script>
 
 <style scoped>
 .drop-zone-container {
   display: flex;
-  justify-content: space-around;
-  align-items: center;
-  width: 60vw; /* Ajouter cette propriété pour que la classe "drop-zone-container" prenne la largeur de l'écran */
-  margin: 0 auto;
   padding: 20px;
-}
-
-.drop-zone {
-  flex: 1;
-  width: 240px;
-  height: 240px;
-  border: 4px dashed #ccc;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  border-radius: 10px; /* Ajout de la propriété border-radius avec une valeur de 10px pour les angles arrondis */
-}
-
-.uploaded-image {
-  width: 100vw;
-  height: 100vh;
-  max-width: 240px;
-  max-height: 150px;
 }
 
 .drop-zone-divider {
