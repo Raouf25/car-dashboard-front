@@ -76,7 +76,7 @@ export default class UploadImagesComponent extends Vue {
   @Mutation setDisplayedPoints!: (displayedPoints: Point[]) => void;
 
   // Utiliser le décorateur @Action pour appeler les actions du store
-  @Action fetchPoints!: () => Promise<void>;
+  @Action fetchPoints!: (formData : FormData) => Promise<void>;
 
   private handleImageDropped(dropZone: number, uploadedImage: UploadedImage): void {
     if (dropZone === 1) {
@@ -95,7 +95,16 @@ export default class UploadImagesComponent extends Vue {
   private startAlgorithm(): void {
     if (this.isButtonActive) {
       this.showResultSection = true;
-      this.fetchPoints()
+
+   const formData = new FormData();
+   if (this.uploadedImage1?.file) {
+      formData.append("file1", this.uploadedImage1.file);
+    }
+    if (this.uploadedImage2?.file) {
+      formData.append("file2", this.uploadedImage2.file);
+    }
+
+      this.fetchPoints(formData)
         .then(() => {
           const cinqPremiersElements = this.displayedPoints.slice(0, 5);
           this.drawDotsOnImage(
