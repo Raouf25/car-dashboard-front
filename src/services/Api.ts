@@ -44,6 +44,14 @@ class AxiosService {
     return this.instance.post<T>(url, data, config)
   }
 
+  postFiles<T>(url: string, formData: FormData, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+    const headers = {
+      'Access-Control-Allow-Origin': '*',
+      'Content-Type': 'multipart/form-data'
+    };
+    return this.instance.post<T>(url, formData, { ...config, headers });
+  }
+
   put<T> (url: string, data: any, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
     return this.instance.put<T>(url, data, config)
   }
