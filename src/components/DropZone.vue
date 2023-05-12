@@ -25,6 +25,7 @@ export default class DropZone extends Vue {
         const uploadedImage: UploadedImage = {
           name: file.name,
           url: e.target?.result as string,
+          file: file,
         };
         this.isVisible = false;
         this.$emit("imageDropped", uploadedImage);
