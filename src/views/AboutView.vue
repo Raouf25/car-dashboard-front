@@ -2,9 +2,10 @@
   <div class="about">
     <h1>This is an about page</h1>
 
-    <div style="display: flex">
-      <div style="flex: 1">
-        <p>Image 1</p>
+    <div class="flex-container">
+    <div class="zone">
+      <div class="image-title"><p>Image 1</p></div>
+        
         <div
           ref="image1Container"
           class="image-container"
@@ -25,20 +26,52 @@
           ></div>
         </div>
       </div>
-      <div class="drop-zone-divider"></div>
-      <div style="flex: 1">
-        <p>Image 2</p>
+      <div class="zone">
+        <div class="image-title"><p>Image 2</p></div>
+        <div 
+          class="image-container"  >
         <img
           ref="image2"
           :src="image2"
           class="image"
         />
-        <div v-if="extractedImage" class="extracted-image">
-          <p>Extracted Image</p>
-          <img :src="extractedImage" class="image" />
+        </div>
+
+ 
+      </div>
+
+
+      <div class="zone">
+        <div class="image-title"><p>Extracted Image</p></div>
+        
+        <div v-if="extractedImage" class="image-container">
+          
+          <div class="icon-palette">
+            <div class="icon">
+              <i class="material-icons vertical-arrow ">open_in_full</i>
+            </div>
+            <div class="icon">
+              <i class="material-icons horizontal-arrow">open_in_full</i>
+            </div>
+            <div class="icon">
+              <i class="material-icons">undo</i>
+            </div>
+            <div class="icon">
+              <i class="material-icons">redo</i>
+            </div> 
+          </div>
+
+          <img   :src="extractedImage" class="image" />
         </div>
       </div>
+
     </div>
+    <button
+      @click="validatePhoto"
+      class="validate-button"
+    >
+      Validate Image
+    </button>
   </div>
 </template>
 
@@ -119,19 +152,16 @@ export default class About extends Vue {
     this.extractedImage = extractedCanvas.toDataURL();
   }
 }
+
+validatePhoto(): void {
+  console.log("photo is validated")
+}
 }
 
 
 </script>
 
 <style scoped>
-.drop-zone-divider {
-  width: 2px;
-  background-color: #000;
-  margin: 0 10px;
-  height: 100%;
-}
-
 .image {
   width: 100%;
 }
@@ -148,5 +178,54 @@ export default class About extends Vue {
 
 .extracted-image {
   margin-top: 20px;
+}
+.flex-container {
+  display: flex;
+  height: 100%;
+}
+
+.zone {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.icon-palette {
+  display: flex;
+  justify-content: space-between; 
+}
+
+.icon { 
+  text-align: center;
+}
+
+.icon i {
+  font-size: 24px;
+  color: #555;
+  cursor: pointer;
+}
+
+.icon i:hover {
+  color: #000;
+}
+
+.horizontal-arrow {
+  transform: rotate(45deg);
+}
+
+.vertical-arrow {
+  transform: rotate(-45deg);
+}
+
+.image-title {
+  margin-bottom: 10px;
+}
+
+.validate-button {
+  margin-top: 20px;
+  display: block;
+  margin: 20px auto;
 }
 </style>
