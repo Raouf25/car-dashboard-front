@@ -1,49 +1,70 @@
 <template>
-  <div class="container">
-    <h1>1. Uploader des images</h1>
-    <div class="drop-zone-container">
-      <drop-zone
-        label="Zone de dépôt 1"
-        :uploaded-image="uploadedImage1"
-        @imageDropped="handleImageDropped(1, $event)"
-      ></drop-zone>
-      <div class="drop-zone-divider"></div>
-      <drop-zone
-        label="Zone de dépôt 2"
-        :uploaded-image="uploadedImage2"
-        @imageDropped="handleImageDropped(2, $event)"
-      ></drop-zone>
-    </div>
-    <button
-      @click="startAlgorithm"
-      :disabled="!isButtonActive"
-      class="start-button"
-    >
-      Start Analyse
-    </button>
-
-    <h1 v-if="showResultSection">2. Result :</h1>
-    <div v-if="showResultSection" style="display: flex">
-      <div style="flex: 1">
-        <p>Image 1</p>
-        <img
-          :src="processedImage1"
-          :alt="'Processed ' + uploadedImage1?.name"
-        />
+   <div class="container">
+      <div v-if="!showResultSection">
+         <h1>1. Uploader des images</h1>
+         <div class="drop-zone-container">
+            <drop-zone
+               label="Zone de dépôt 1"
+               :uploaded-image="uploadedImage1"
+               @imageDropped="handleImageDropped(1, $event)"
+               ></drop-zone>
+            <div class="drop-zone-divider"></div>
+            <drop-zone
+               label="Zone de dépôt 2"
+               :uploaded-image="uploadedImage2"
+               @imageDropped="handleImageDropped(2, $event)"
+               ></drop-zone>
+         </div>
+         <button
+            @click="startAlgorithm"
+            :disabled="!isButtonActive"
+            class="start-button"
+            >
+         Start Analyse
+         </button>
       </div>
-      <div class="drop-zone-divider"></div>
-      <div style="flex: 1">
-        <p>Image 2</p>
-        <img
-          :src="processedImage2"
-          :alt="'Processed ' + uploadedImage2?.name"
-        />
-      </div>
-    </div>
 
-  </div>
+
+
+
+      <div v-if="showResultSection">
+         <h1 >2. Result :</h1>
+
+         <div style="display: flex">
+            <div style="flex: 1">
+               <p>Image 1</p>
+               <img :src="processedImage1" :alt="'Processed ' + uploadedImage1?.name"  />
+            </div>
+            <div class="drop-zone-divider"></div>
+            <div style="flex: 1">
+               <p>Image 2</p>
+               <img :src="processedImage2"  :alt="'Processed ' + uploadedImage2?.name" />
+            </div>
+         </div>
+
+
+         <div class="buttons-container">
+               <button
+                  @click="goToPreviousStep"
+                  
+                  class="second-step-button previous-button"
+                  >
+               Previous
+               </button>
+               <button
+                  @click="goToPreviousStep" 
+                  class="second-step-button submit-button"
+                  >
+               Submit
+               </button>
+            </div>
+      </div>
+
+
+
+
+   </div>
 </template>
-
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";  
 import DropZone from "@/components/DropZone.vue";
@@ -59,12 +80,12 @@ import { Getter, Mutation, Action } from "vuex-class";
   })
 export default class UploadImagesComponent extends Vue {
   public uploadedImage1: UploadedImage | null = null;
-  private uploadedImage2: UploadedImage | null = null;
+  public uploadedImage2: UploadedImage | null = null;
 
-  private processedImage1: string | null = null;
-  private processedImage2: string | null = null;
+  public processedImage1: string | null = null;
+  public processedImage2: string | null = null;
 
-  private isButtonActive = false;
+  public isButtonActive = false;
   public showResultSection = false;
 
   public coloredPoints: Point[] = [];
@@ -78,7 +99,7 @@ export default class UploadImagesComponent extends Vue {
   // Utiliser le décorateur @Action pour appeler les actions du store
   @Action fetchPoints!: (formData : FormData) => Promise<void>;
 
-  private handleImageDropped(dropZone: number, uploadedImage: UploadedImage): void {
+  handleImageDropped(dropZone: number, uploadedImage: UploadedImage): void {
     if (dropZone === 1) {
       this.uploadedImage1 = uploadedImage;
     } else if (dropZone === 2) {
@@ -92,7 +113,14 @@ export default class UploadImagesComponent extends Vue {
       this.uploadedImage1 !== null && this.uploadedImage2 !== null;
   }
 
-  private startAlgorithm(): void {
+  goToPreviousStep() : void{
+    this.showResultSection = false;
+    this.isButtonActive = false;
+    this.uploadedImage1 = null;
+    this.uploadedImage2 = null;
+  }
+
+  startAlgorithm(): void {
     if (this.isButtonActive) {
       this.showResultSection = true;
 
@@ -110,12 +138,12 @@ export default class UploadImagesComponent extends Vue {
           this.drawDotsOnImage(
             "uploadedImage1",
             "processedImage1",
-            cinqPremiersElements
+            this.displayedPoints
           );
           this.drawDotsOnImage(
             "uploadedImage2",
             "processedImage2",
-            cinqPremiersElements
+            this.displayedPoints
           );
         })
         .catch((error) => {
@@ -190,4 +218,25 @@ li {
   display: block;
   margin: 20px auto;
 }
+
+
+.buttons-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.second-step-button {
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+}
+
+.previous-button {
+  order: 1; /* Changes the order of the button to appear on the left */
+}
+
+.submit-button {
+  order: 2; /* Changes the order of the button to appear on the right */
+}
+
 </style>
