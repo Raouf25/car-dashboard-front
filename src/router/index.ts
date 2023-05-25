@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import CarView from '../views/CarView.vue'
+import DrawPointView from '../views/DrawPointView.vue'
 import DragAndDropView from '../views/DragAndDropView.vue'
 
 Vue.use(VueRouter)
@@ -16,6 +17,11 @@ const routes: Array<RouteConfig> = [
     path: '/car-list',
     name: 'cars',
     component: CarView
+  },
+  {
+    path: '/draw-point',
+    name: 'draw',
+    component: DrawPointView
   },
   {
     path: '/image',
