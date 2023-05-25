@@ -28,6 +28,10 @@
 				<span class="material-icons">description</span>
 				<span class="text">About</span>
 			</router-link>
+			<router-link to="/draw-point" class="button">
+				<span class="material-icons">star</span>
+				<span class="text">draw point</span>
+			</router-link>
 			<router-link to="/team" class="button">
 				<span class="material-icons">group</span>
 				<span class="text">Team</span>
