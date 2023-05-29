@@ -6591,9 +6591,9 @@ safe-buffer@5.2.1, safe-buffer@>=5.1.0, safe-buffer@^5.0.1, safe-buffer@^5.1.0, 
   version "2.1.2"
   resolved "https://registry.npmjs.org/safer-buffer/-/safer-buffer-2.1.2.tgz"
 
-sass-loader@^13.2.2:
-  version "13.2.2"
-  resolved "https://registry.npmjs.org/sass-loader/-/sass-loader-13.2.2.tgz"
+sass-loader@^13.3.1:
+  version "13.3.1"
+  resolved "https://registry.yarnpkg.com/sass-loader/-/sass-loader-13.3.1.tgz#32ee5791434b9b4dbd1adcce76fcb4cea49cc12c"
   dependencies:
     klona "^2.0.6"
     neo-async "^2.6.2"
