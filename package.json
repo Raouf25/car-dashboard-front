@@ -14,7 +14,7 @@
   "dependencies": {
     "axios": "^1.4.0",
     "core-js": "^3.32.1",
-    "element-ui": "^2.15.13",
+    "element-ui": "^2.15.14",
     "fs": "^0.0.1-security",
     "iso-3166-1": "^2.1.1",
     "material-design-icons-iconfont": "^6.7.0",
