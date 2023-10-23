@@ -1252,6 +1252,11 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@one-ini/wasm@0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@one-ini/wasm/-/wasm-0.1.1.tgz#6013659736c9dbfccc96e8a9c2b3de317df39323"
+  integrity sha512-XuySG1E38YScSJoMlqovLru4KTUNSjgVTIjyh7qMX6aNN5HY5Ct5LhRJdxO79JtTzKfzV/bnWpz+zquYrISsvw==
+
 "@polka/url@^1.0.0-next.20":
   version "1.0.0-next.21"
   resolved "https://registry.npmjs.org/@polka/url/-/url-1.0.0-next.21.tgz"
@@ -1999,14 +2004,13 @@
   resolved "https://registry.yarnpkg.com/@vue/shared/-/shared-3.3.5.tgz#da717d8ce807d9d337f55ebcfb6cad7bf51e9a76"
   integrity sha512-oNJN1rCtkqm1cIxU1BuZVEVRWIp4DhaxXucEzzZ/iDKHP71ZxhkBPNK+URySiECH6aiOZzC60PS2bd6JFznvNA==
 
-"@vue/test-utils@^1.3.6":
-  version "1.3.6"
-  resolved "https://registry.npmjs.org/@vue/test-utils/-/test-utils-1.3.6.tgz"
-  integrity sha512-udMmmF1ts3zwxUJEIAj5ziioR900reDrt6C9H3XpWPsLBx2lpHKoA4BTdd9HNIYbkGltWw+JjWJ+5O6QBwiyEw==
+"@vue/test-utils@^2.4.1":
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/@vue/test-utils/-/test-utils-2.4.1.tgz#7db869b4142d2a5fce4ad6c6dfa01c8ea524f26c"
+  integrity sha512-VO8nragneNzUZUah6kOjiFmD/gwRjUauG9DROh6oaOeFwX1cZRUNHhdeogE8635cISigXFTtGLUQWx5KCb0xeg==
   dependencies:
-    dom-event-types "^1.0.0"
-    lodash "^4.17.15"
-    pretty "^2.0.0"
+    js-beautify "1.14.9"
+    vue-component-type-helpers "1.8.4"
 
 "@vue/vue-loader-v15@npm:vue-loader@^15.9.7":
   version "15.10.1"
@@ -2892,12 +2896,17 @@ combined-stream@^1.0.6, combined-stream@^1.0.8, combined-stream@~1.0.6:
   dependencies:
     delayed-stream "~1.0.0"
 
+commander@^10.0.0:
+  version "10.0.1"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-10.0.1.tgz#881ee46b4f77d1c1dccc5823433aa39b022cbe06"
+  integrity sha512-y4Mg2tXshplEbSGzx7amzPwKKOCGuoSRP/CjEdwwk0FOGlUbq6lKuoyDZTNZkmxHdJtp54hdfY/JUrdL7Xfdug==
+
 commander@^11.0.0:
   version "11.0.0"
   resolved "https://registry.npmjs.org/commander/-/commander-11.0.0.tgz"
   integrity sha512-9HMlXtt/BNoYr8ooyjjNRdIilOTkVJXB+GhxMTtOKwk0R4j4lS4NpjuqmRxroBfnfTSHQIHQB7wryHhXarNjmQ==
 
-commander@^2.19.0, commander@^2.20.0:
+commander@^2.20.0:
   version "2.20.3"
   resolved "https://registry.npmjs.org/commander/-/commander-2.20.3.tgz"
 
@@ -3386,10 +3395,6 @@ dom-converter@^0.2.0:
   dependencies:
     utila "~0.4"
 
-dom-event-types@^1.0.0:
-  version "1.1.0"
-  resolved "https://registry.npmjs.org/dom-event-types/-/dom-event-types-1.1.0.tgz"
-
 dom-serializer@^1.0.1:
   version "1.4.1"
   resolved "https://registry.npmjs.org/dom-serializer/-/dom-serializer-1.4.1.tgz"
@@ -3453,14 +3458,15 @@ ecc-jsbn@~0.1.1:
     jsbn "~0.1.0"
     safer-buffer "^2.1.0"
 
-editorconfig@^0.15.3:
-  version "0.15.3"
-  resolved "https://registry.npmjs.org/editorconfig/-/editorconfig-0.15.3.tgz"
+editorconfig@^1.0.3:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/editorconfig/-/editorconfig-1.0.4.tgz#040c9a8e9a6c5288388b87c2db07028aa89f53a3"
+  integrity sha512-L9Qe08KWTlqYMVvMcTIvMAdl1cDUubzRNYL+WfA4bLDMHe4nemKkpmYzkznE1FwLKu0EEmy6obgQKzMJrg4x9Q==
   dependencies:
-    commander "^2.19.0"
-    lru-cache "^4.1.5"
-    semver "^5.6.0"
-    sigmund "^1.0.1"
+    "@one-ini/wasm" "0.1.1"
+    commander "^10.0.0"
+    minimatch "9.0.1"
+    semver "^7.5.3"
 
 ee-first@1.1.1:
   version "1.1.1"
@@ -4202,7 +4208,7 @@ glob@^7.0.3, glob@^7.1.1, glob@^7.1.2, glob@^7.1.3, glob@^7.1.4, glob@^7.1.6:
     once "^1.3.0"
     path-is-absolute "^1.0.0"
 
-glob@^8.0.3:
+glob@^8.1.0:
   version "8.1.0"
   resolved "https://registry.npmjs.org/glob/-/glob-8.1.0.tgz"
   dependencies:
@@ -5176,13 +5182,14 @@ joi@^17.4.0:
     "@sideway/formula" "^3.0.1"
     "@sideway/pinpoint" "^2.0.0"
 
-js-beautify@^1.6.12:
-  version "1.14.7"
-  resolved "https://registry.npmjs.org/js-beautify/-/js-beautify-1.14.7.tgz"
+js-beautify@1.14.9, js-beautify@^1.6.12:
+  version "1.14.9"
+  resolved "https://registry.yarnpkg.com/js-beautify/-/js-beautify-1.14.9.tgz#a5db728bc5a0d84d3b1a597c376b29bd4d39c8e5"
+  integrity sha512-coM7xq1syLcMyuVGyToxcj2AlzhkDjmfklL8r0JgJ7A76wyGMpJ1oA35mr4APdYNO/o/4YY8H54NQIJzhMbhBg==
   dependencies:
     config-chain "^1.1.13"
-    editorconfig "^0.15.3"
-    glob "^8.0.3"
+    editorconfig "^1.0.3"
+    glob "^8.1.0"
     nopt "^6.0.0"
 
 js-message@1.0.7:
@@ -5447,7 +5454,7 @@ lodash.uniq@^4.5.0:
   version "4.5.0"
   resolved "https://registry.npmjs.org/lodash.uniq/-/lodash.uniq-4.5.0.tgz"
 
-lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.20, lodash@^4.17.21, lodash@^4.7.0:
+lodash@^4.17.14, lodash@^4.17.20, lodash@^4.17.21, lodash@^4.7.0:
   version "4.17.21"
   resolved "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz"
 
@@ -5481,7 +5488,7 @@ lower-case@^2.0.2:
   dependencies:
     tslib "^2.0.3"
 
-lru-cache@^4.0.1, lru-cache@^4.1.2, lru-cache@^4.1.5:
+lru-cache@^4.0.1, lru-cache@^4.1.2:
   version "4.1.5"
   resolved "https://registry.npmjs.org/lru-cache/-/lru-cache-4.1.5.tgz"
   dependencies:
@@ -5606,6 +5613,13 @@ mini-css-extract-plugin@^2.5.3:
 minimalistic-assert@^1.0.0:
   version "1.0.1"
   resolved "https://registry.npmjs.org/minimalistic-assert/-/minimalistic-assert-1.0.1.tgz"
+
+minimatch@9.0.1:
+  version "9.0.1"
+  resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-9.0.1.tgz#8a555f541cf976c622daf078bb28f29fb927c253"
+  integrity sha512-0jWhJpD/MdhPXwPuiRkCbfYfSKp2qnn2eOc279qI7f+osl/l+prKSrvhg157zSYvx/1nmgn2NqdT6k2Z7zSH9w==
+  dependencies:
+    brace-expansion "^2.0.1"
 
 minimatch@^3.0.4, minimatch@^3.0.5, minimatch@^3.1.1, minimatch@^3.1.2:
   version "3.1.2"
@@ -6332,7 +6346,7 @@ pretty-format@^28.1.3:
     ansi-styles "^5.0.0"
     react-is "^18.0.0"
 
-pretty@2.0.0, pretty@^2.0.0:
+pretty@2.0.0:
   version "2.0.0"
   resolved "https://registry.npmjs.org/pretty/-/pretty-2.0.0.tgz"
   dependencies:
@@ -6733,7 +6747,7 @@ selfsigned@^2.1.1:
   dependencies:
     node-forge "^1"
 
-"semver@2 || 3 || 4 || 5", semver@^5.5.0, semver@^5.6.0:
+"semver@2 || 3 || 4 || 5", semver@^5.5.0:
   version "5.7.1"
   resolved "https://registry.npmjs.org/semver/-/semver-5.7.1.tgz"
 
@@ -6838,10 +6852,6 @@ side-channel@^1.0.4:
     call-bind "^1.0.0"
     get-intrinsic "^1.0.2"
     object-inspect "^1.9.0"
-
-sigmund@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.npmjs.org/sigmund/-/sigmund-1.0.1.tgz"
 
 signal-exit@^3.0.0, signal-exit@^3.0.2, signal-exit@^3.0.3:
   version "3.0.7"
@@ -7487,6 +7497,11 @@ verror@1.10.0:
 vue-class-component@^7.2.3:
   version "7.2.6"
   resolved "https://registry.npmjs.org/vue-class-component/-/vue-class-component-7.2.6.tgz"
+
+vue-component-type-helpers@1.8.4:
+  version "1.8.4"
+  resolved "https://registry.yarnpkg.com/vue-component-type-helpers/-/vue-component-type-helpers-1.8.4.tgz#302d85fac912519cdf0dd2fb51402e5215d85628"
+  integrity sha512-6bnLkn8O0JJyiFSIF0EfCogzeqNXpnjJ0vW/SZzNHfe6sPx30lTtTXlE5TFs2qhJlAtDFybStVNpL73cPe3OMQ==
 
 vue-country-flag@^2.3.2:
   version "2.3.2"
